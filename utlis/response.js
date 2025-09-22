@@ -1,8 +1,8 @@
 export const sendResponse = (res, success, status, message, result) => {
-    res.status(json({
+    res.status(status).json({
         status: status,
         success: success,
         message: message,
         data: result
-    }))
+    })
 }
