@@ -20,6 +20,9 @@ export const Users = mongoose.Schema({
         enum: ["admin", "organizer", "attendee"],
         default: "attendee"
     },
+    avatar: {
+        type: String,
+    },
     createdAt: {
         type: Date,
         default: new Date
