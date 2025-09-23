@@ -26,9 +26,6 @@ const Event = mongoose.Schema({
     banner: {
         type: String,
     },
-    brocher: {
-        type: String
-    },
     status: {
         type: String,
         enum: ["pending", "approved", "rejected"],
