@@ -4,11 +4,17 @@ import { getAllUsersService, profileDetailsService, registerUserService, updateP
 export const userRegisterController = async (req, res) => {
     try {
         let data = {
-            avatar: req.file.path,
+            avatar: req?.file?.path,
             ...req.body
         }
+        if (data?.name == "" || data?.email == "" || data?.password == "" || data?.role == "") {
+            throw new Error("All fields are required")
+        }
+        if (!["attendee", "admin", "organizer"].includes(data?.role)) {
+            throw new Error("Invalid Role")
+        }
         let result = await registerUserService(data)
-        sendResponse(res, true, 200, "User registered successfully", result)
+        sendResponse(res, true, 144, "User registered successfully", result)
     } catch (error) {
         sendResponse(res, false, 500, error.message)
     }
@@ -17,6 +23,9 @@ export const userRegisterController = async (req, res) => {
 export const userLoginController = async (req, res, next) => {
     try {
         let data = req.body
+        if (data.email == "" || data.password == "") {
+            throw new Error("All fields are required")
+        }
         let result = await userLoginService(data)
         req.body = result
         next()
@@ -28,6 +37,9 @@ export const userLoginController = async (req, res, next) => {
 export const profileDetailsController = async (req, res) => {
     try {
         let data = req.params
+        if (data.id == "") {
+            throw new Error("Id is required")
+        }
         let result = await profileDetailsService(data)
         sendResponse(res, true, 200, "Profile Details Fetched Succesfully", result)
     } catch (error) {
@@ -59,7 +71,13 @@ export const getAllUsersController = async (req, res) => {
 
 export const updateUserRoleController = async (req, res) => {
     try {
-        let data = { role: req.query.role,...req.params }
+        let data = { role: req.query.role, ...req.params }
+        if (data.role == "" || data.id == "") {
+            throw new Error("Role and Id is Required")
+        }
+        if (!["attendee", "admin", "organizer"].includes(data?.role)) {
+            throw new Error("Invalid Role")
+        }
         let result = await updateUserRoleService(data)
         sendResponse(res, true, 200, "User Role Updated Succesfully", result)
     } catch (error) {

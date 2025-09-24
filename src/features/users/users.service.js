@@ -6,8 +6,12 @@ const User = mongoose.model("Users", Users)
 
 export const registerUserService = async (data) => {
     try {
+        let user = await User.find({ email: data.email })
+        if (user.length > 0) {
+            throw new Error("Email already exists")
+        }
         let result = await User.create(data)
-        return result
+        return
     } catch (error) {
         throw new Error(error.message);
     }
