@@ -1,6 +1,11 @@
 import mongoose from "mongoose";
 
 const Event = mongoose.Schema({
+    organizerId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "users",
+        required: true
+    },
     title: {
         type: String,
         reqired: true
@@ -34,11 +39,7 @@ const Event = mongoose.Schema({
         enum: ["pending", "approved", "rejected"],
         default: "pending"
     },
-    organizerId: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "Users",
-        required: true
-    }
+
 }, {
     timeStamps: true
 })
